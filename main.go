@@ -31,5 +31,5 @@ func main() {
 		log.Printf("✅ Status after checkout UNCHANGED")
 		return
 	}
-	log.Fatalf("🚨 Status after checkout CHANGED: %s", string(output))
+	log.Fatalf("🚨 Status after checkout CHANGED: \n\n%s", string(output))
 }
