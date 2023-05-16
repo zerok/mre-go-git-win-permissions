@@ -39,7 +39,7 @@ func main() {
 	if len(output) == 0 {
 		log.Printf("Status after checkout UNCHANGED")
 	} else {
-		log.Printf("Status after checkout CHANGED: \n\n%s", string(output))
+		log.Printf("Status after checkout CHANGED:\n%s", string(output))
 	}
 
 	log.SetPrefix("git:    ")
@@ -53,6 +53,6 @@ func main() {
 	if len(output) == 0 {
 		log.Printf("Status after checkout UNCHANGED")
 	} else {
-		log.Printf("Status after checkout CHANGED: \n\n%s", string(output))
+		log.Printf("Status after checkout CHANGED:\n%s", string(output))
 	}
 }
