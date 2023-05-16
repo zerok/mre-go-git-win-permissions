@@ -10,9 +10,13 @@ import (
 )
 
 func main() {
-	os.RemoveAll("tmp")
-	_, err := git.PlainClone("tmp", false, &git.CloneOptions{
-		URL:           "https://github.com/zerok/mre-go-git-win-permissions.git",
+	repoURL := "https://github.com/zerok/mre-go-git-win-permissions.git"
+
+	os.RemoveAll("tmp-gogit")
+	os.RemoveAll("tmp-git")
+
+	_, err := git.PlainClone("tmp-gogit", false, &git.CloneOptions{
+		URL:           repoURL,
 		ReferenceName: plumbing.NewBranchReferenceName("main"),
 		Depth:         50,
 	})
@@ -20,16 +24,35 @@ func main() {
 		log.Fatalf("Failed to clone repository into tmp folder: %s", err)
 	}
 
+	if err := exec.Command("git", "clone", repoURL, "tmp-git").Run(); err != nil {
+		log.Fatalf("Failed to clone repository using native client: %s", err)
+	}
+
+	log.SetPrefix("go-git: ")
 	cmd := exec.Command("git", "status", "--short")
-	cmd.Dir = "tmp"
+	cmd.Dir = "tmp-gogit"
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Fatalf("Failed to run git status in tmp folder: %s", err)
 	}
 
 	if len(output) == 0 {
-		log.Printf("✅ Status after checkout UNCHANGED")
-		return
+		log.Printf("Status after checkout UNCHANGED")
+	} else {
+		log.Printf("Status after checkout CHANGED: \n\n%s", string(output))
 	}
-	log.Fatalf("🚨 Status after checkout CHANGED: \n\n%s", string(output))
+
+	log.SetPrefix("git:    ")
+	cmd = exec.Command("git", "status", "--short")
+	cmd.Dir = "tmp-git"
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		log.Fatalf("Failed to run git status in tmp folder: %s", err)
+	}
+
+	if len(output) == 0 {
+		log.Printf("Status after checkout UNCHANGED")
+	} else {
+		log.Printf("Status after checkout CHANGED: \n\n%s", string(output))
+	}
 }
