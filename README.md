@@ -4,7 +4,7 @@ It should serve as example for an issue in go-git when used on Windows where the
 ## How to use
 
 ```
-git clone git@github.com:zerok/mre-go-git-win-permissions.git
+git clone https://github.com/zerok/mre-go-git-win-permissions.git
 cd mre-go-git-win-permissions
 go run .
 ```
